@@ -435,6 +435,29 @@ class MyBot(Chat):
 
         return bot_output_modified
 
+    def respond_with_simple_bot(self, input_chatbot):
+        """Respond with the simple bot, that is the one which uses generic regex patterns.
+
+        Args:
+            input_chatbot (string): the input sent to the bot
+
+        Returns:
+            string: the output produced by the simple bot, None if nothing was matches
+        """
+        # Remove punctuation
+        input_chatbot_modified = re.sub(r'[^\w\s]','',input_chatbot)
+        output_chatbot = self._GENERIC_patterns_extractor.respond(input_chatbot_modified)
+        
+        # If the bot doesn't understand the input and the input was a question, return a random default answer
+        if output_chatbot is None and input_chatbot[-1] == "?":
+            output_chatbot = random.choice([
+            "Why do you ask that?",
+            "Please consider whether you can answer your own question.",
+            "Perhaps the answer lies within yourself?",
+            "Why don't you tell me?",])
+    
+        return output_chatbot
+
     def respond(self, str_input):
         """ Creates a response for the user input.
 
@@ -455,7 +478,9 @@ class MyBot(Chat):
         # If the sentence chosen is too short, use the simple bot with classic regex
         if len(sentences[idx_chosen_sentence]) <= 3:
             print("(< 4w) SIMPLE BOT INPUT: ", sentences[idx_chosen_sentence])
-            output_chatbot = self._GENERIC_patterns_extractor.respond(sentences[idx_chosen_sentence].text)
+            # output_chatbot = self._GENERIC_patterns_extractor.respond(sentences[idx_chosen_sentence].text)
+            output_chatbot = self.respond_with_simple_bot(sentences[idx_chosen_sentence].text)
+
         # Otherwise, try to use the advanced bot
         else:
             # For each sentence
@@ -506,7 +531,9 @@ class MyBot(Chat):
             # If the advanced bot did not return anything, use the simple bot
             if output_chatbot == "" or output_chatbot is None:
                 print("SIMPLE BOT INPUT: ", sentences[idx_chosen_sentence].text)
-                output_chatbot = self._GENERIC_patterns_extractor.respond(sentences[idx_chosen_sentence].text)
+                # output_chatbot = self._GENERIC_patterns_extractor.respond(sentences[idx_chosen_sentence].text)
+                output_chatbot = self.respond_with_simple_bot(sentences[idx_chosen_sentence].text)
+
         ##
         # If the advanced or simple bot did not return anything, use the simple bot
         if output_chatbot is None or output_chatbot == "":
@@ -514,7 +541,8 @@ class MyBot(Chat):
             output_chatbot = self.use_memory_frag()
             if output_chatbot == "":
                 print("USING FRAG FAILED, DEFAULT ANSWER INSTEAD")
-                output_chatbot = self._GENERIC_patterns_extractor.respond(SYM_NONE)
+                # output_chatbot = self._GENERIC_patterns_extractor.respond(SYM_NONE)
+                output_chatbot = self.respond_with_simple_bot(SYM_NONE)
 
         return output_chatbot
 
@@ -556,12 +584,14 @@ if __name__ == "__main__":
             # + " Can't you swim?"
             # + " I understand how you can sleep in that position."
             # + " Won't Bob go to the pool tomorrow?"
-            + " Doesn't Bob go to the pool tomorrow?"
+            # + " Doesn't Bob go to the pool tomorrow?"
+            # + "Nodoby can understand me."
+            # + "you hate me."
+            # + "Do you remember the old John?"
+            + "Does she think about you?"
     )
     hard_coded_case = True
     if hard_coded_case:
-        # text = " Bob convinced me to be curious."
-        # print("you: ", text)
         response = _EXTERNAL_CHATBOT.respond(text.strip())
         print("bot:", response)
         exit()

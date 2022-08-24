@@ -151,6 +151,25 @@ complex_pairs = (
 
 simple_pairs = (
     (
+        rf"(.*)you (.*) me",
+        (
+            "What makes you think I %2 you?",
+        ),
+    ),
+    (
+        rf"(.*)you remember (.*)",
+        (
+            "Do you often think of %2?",
+            "Does thinking of %2 bring anything else to mind?",
+            "What else do you remember?",
+            "Why do you remember %2 just now?",
+            "What in the present situation remings you of %2?",
+            "What's the connection between me and %2?",
+            "Do you think I will forget %2?"
+        ),
+    ),
+    # Eliza
+    (
         r"(.*)('s|is)(.*) hard to (.*)",
         (
             "Why do you believe that?",
@@ -425,15 +444,6 @@ simple_pairs = (
             "Do you remember any dreams or nightmares from childhood?",
             "Did the other children sometimes tease you?",
             "How do you think your childhood experiences relate to your feelings today?",
-        ),
-    ),
-    (
-        r"(.*)\?",
-        (
-            "Why do you ask that?",
-            "Please consider whether you can answer your own question.",
-            "Perhaps the answer lies within yourself?",
-            "Why don't you tell me?",
         ),
     ),
     (
