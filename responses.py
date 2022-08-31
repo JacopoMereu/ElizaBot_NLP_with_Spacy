@@ -26,7 +26,19 @@ SYM_NONE = "_sysnone_"
 complex_pairs = (
     # You (the bot)
     (
-        rf"(.*)you {SYM_INPUT_NEG}? understand (.*)",
+        rf"(.*)you play (.*)",
+        (
+            "I'm just a bot. I don't play at anything.",
+        ),
+    ),
+    (
+        rf"(.*)you change (that|the|this)?(.*)",
+        (
+            "What's the matter with that %3?",
+        ),
+    ),
+    (
+        rf"(.*)you(?: {SYM_INPUT_NEG})? understand (.*)",
         (
             f"What makes you think I {SYM_VERB_REFLECTED} %2?",
         ),
@@ -50,6 +62,12 @@ complex_pairs = (
         rf"(My name) be (\w+)",
         (
             f"Hey %2, I'm Eliza. What do you want to talk about?",
+        ),
+    ),
+        (
+        rf"{PATTERN_SUBJECTS_EXCEPT_YOU} {SYM_INPUT_NEG} talk (.+)",
+        (
+            "Did that strike a nerve?",
         ),
     ),
     (
@@ -82,10 +100,10 @@ complex_pairs = (
     (
         rf"{PATTERN_SUBJECTS_EXCEPT_YOU}(?: {SYM_INPUT_NEG})? (?:go|be) (to|at) (.+)",
         (
-            # "Please, talk to me more about %3.",
-            # "What kind of place is %3?",
-            # "What things can %1 find in %3?",
-            # f"Can you detail more why %1 {SYM_VERB_REFLECTED} %2 %3?",
+            "Please, talk to me more about %3.",
+            "What kind of place is %3?",
+            "What things can %1 find in %3?",
+            f"Can you detail more why %1 {SYM_VERB_REFLECTED} %2 %3?",
             f"Why {SYM_AUX_REFLECTED_QUESTION} %1 {SYM_VERB_REFLECTED_QUESTION} %2 %3?",
         ),
     ),
@@ -151,7 +169,7 @@ complex_pairs = (
 
 simple_pairs = (
     (
-        rf"(.*)you (.*) me",
+        rf"(.*)you (.*) \bme\b(.*)",
         (
             "What makes you think I %2 you?",
         ),
@@ -168,7 +186,13 @@ simple_pairs = (
             "Do you think I will forget %2?"
         ),
     ),
-    # Eliza
+    (
+        r"(.*)I (.*)(bad|terrible|awesome|nice|great) (day|journey|trip|conversation|meeting)(.*)",
+        (
+            "How the %2 %3 makes you feel?",
+            "Do you want to talk about the %2 %3?",
+        ),
+    ),
     (
         r"(.*)('s|is)(.*) hard to (.*)",
         (
@@ -457,7 +481,7 @@ simple_pairs = (
             "Why do you say that?",
             "I see. Please go on.",
             "Very interesting. Can you tell me more?",
-            "I see.  And what does that tell you?",
+            "I see. And what does that tell you?",
             "How does that make you feel?",
             "How do you feel when you say that?",
         ),

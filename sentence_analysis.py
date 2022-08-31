@@ -297,8 +297,8 @@ def print_all(doc):
         doc (Spacy document): the Spacy document whose information are printed
     """
     for token in doc:
-        if token.pos_ in ["VERB", "AUX","PART"]:
-            print('Tok : ' , token, '| Dep_ : ', token.dep_, '| Pos_ : ', token.pos_, '| morph : ', token.morph, ' | morph_number ', token.morph.get('Number'), ' | tag_ : ', token.tag_, '| lemma: ', token.lemma_)
+        # if token.pos_ in ["VERB", "AUX","PART"]:
+        print('Tok : ' , token, '| Dep_ : ', token.dep_, '| Pos_ : ', token.pos_, '| morph : ', token.morph, ' | morph_number ', token.morph.get('Number'), ' | tag_ : ', token.tag_, '| lemma: ', token.lemma_)
 
 
 def get_clauses(nlp, doc, sentence):
@@ -502,7 +502,13 @@ if __name__ == "__main__":
             + " my family is ok, i'm lucky."
             + " I'm sad. My friends ate my last sandwich."
             + " Because this feeling makes me feel better than other kind of feelings."
-            " I know. He knows. I knew. I have known. She has known."
+            + " I know. He knows. I knew. I have known. She has known."
+            + "Bob visited me and we chatted about my problems."
+            + " fine thanks, and you?"
+            + " I've already told you that."
+            + " Let's talk about music."
+            + " Do you know what malloreddus means?"
+
     )
     txt = preprocessing(nlp, txt)
     doc = nlp(txt)

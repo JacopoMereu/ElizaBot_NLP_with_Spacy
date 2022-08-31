@@ -5,6 +5,8 @@ from responses import *
 from sentence_analysis import get_analyzed_clause, get_clauses, preprocessing, get_interrogative_auxiliar_from_verb
 import re
 
+NOT_MANANGEABLE_TEXT_LIST = ["Let's"]
+
 class MyBot(Chat):
     def __init__(self):
         # The current object is for the advanced patterns
@@ -98,6 +100,13 @@ class MyBot(Chat):
         """
         # Save adjectives into memory
         adjectives_dict = SVA[2]
+        subject = SVA[0]
+
+        # If there is no subject, exit
+        if subject is None:
+            return
+
+
         for key, list_adjs_value in adjectives_dict.items():
             # We want only the adjectives linked to a noun
             isValidElement = key.pos_ not in ["VERB", "AUX"]
@@ -117,10 +126,10 @@ class MyBot(Chat):
 
             # Check for possesive pronouns or the article "the" to add in the string
             key_str = key.text.lower()
-            for j, tok in enumerate(SVA[0]):
+            for j, tok in enumerate(subject):
                 if tok == key:
-                    if SVA[0][j-1].tag_ in ['DT','PRP$']:
-                        key_str = SVA[0][j-1].text.lower() + " " + key_str
+                    if subject[j-1].tag_ in ['DT','PRP$']:
+                        key_str = subject[j-1].text.lower() + " " + key_str
 
             # Save the information in the memory
             self._MEMORY.append((key_str, adjectives_string, False))
@@ -171,8 +180,14 @@ class MyBot(Chat):
                 Otherwise, it returns an empty string.
         """
         print("SVA analysis of the clase: ", SVA)
+
+        # Check if there is at least one verb.
+        verb_list = SVA[1]
+        if len(verb_list) == 0:
+            return ""
+
         subject = SVA[0]
-        verb = (SVA[1])[-1] # pick last span verb in list
+        verb = verb_list[-1] # pick last span verb in list
         adjs = SVA[2]
         obj = SVA[3]
         isQuestion = SVA[4]
@@ -267,10 +282,10 @@ class MyBot(Chat):
             if isQuestion:
                 interrogative_auxiliar = (SVA[1])[0]
                 # In a question the negative part is in the auxiliar before the subject
-                hasNegation = len(interrogative_auxiliar)>1 and interrogative_auxiliar[1].tag_ == "RB"
+                hasNegation = len(interrogative_auxiliar)>1 and (interrogative_auxiliar[1].dep_ == "neg")
             else:
                 # In a non-question the negative part is in the auxiliar after the subject
-                hasNegation = len(verb)>1 and verb[1].tag_ == "RB"
+                hasNegation = len(verb)>1 and verb[1].dep_ == "neg"
 
             originalConjugatedVerb = [verb]
             originalConjugatedVerb = ' '.join([tok.text for tok in originalConjugatedVerb])           
@@ -281,10 +296,10 @@ class MyBot(Chat):
             if isQuestion:
                 interrogative_auxiliar = (SVA[1])[0]
                 print("interrogative_auxiliar: ", interrogative_auxiliar)
-                hasNegation = len(interrogative_auxiliar)>1 and interrogative_auxiliar[1].tag_ == "RB"
+                hasNegation = len(interrogative_auxiliar)>1 and interrogative_auxiliar[1].dep_ == "neg"
             # If it's not a question, the negative part is in the auxiliar after the subject
             else:
-                hasNegation = len(verb)>1 and verb[1].tag_ == "RB"
+                hasNegation = len(verb)>1 and verb[1].dep_ == "neg"
 
             firstMainTuple = mainVerbsList[0] # (UNDERSTAND, IDX)
             ##### CASE COMPLEX VERB: I don't know how you can do that --> main verbs = [know, do]
@@ -397,12 +412,14 @@ class MyBot(Chat):
                 obj = re.sub(rf"{string_to_remove}", '', obj)
                 obj = re.sub(r'\s+', ' ', obj)
 
+            obj = " " + obj
+
         # If there is no object, obj is an empty string
         else:
             obj = ""
 
         ## OUTPUT
-        output = subject + ' ' + verbToSearch + adjectives_string + ' ' + obj
+        output = subject + ' ' + verbToSearch + adjectives_string + obj
         # print("BOT INPUT ELABORDATED:" , output)
         return (output, {SYM_VERB: originalConjugatedVerb, SYM_VERB_REFLECTED: reflectedOriginalVerb, 
                          SYM_AUX_REFLECTED_QUESTION: reflectedAuxiliarQuestion, SYM_VERB_REFLECTED_QUESTION: reflectedVerbQuestion})
@@ -476,8 +493,10 @@ class MyBot(Chat):
         idx_chosen_sentence = self.get_index_most_weighted(sentences)
         
         # If the sentence chosen is too short, use the simple bot with classic regex
-        if len(sentences[idx_chosen_sentence]) <= 3:
-            print("(< 4w) SIMPLE BOT INPUT: ", sentences[idx_chosen_sentence])
+        if len(sentences[idx_chosen_sentence]) <= 3 \
+            or any(x.lower() in sentences[idx_chosen_sentence].text.lower() for x in NOT_MANANGEABLE_TEXT_LIST):
+
+            print("(< 4w or not allowed) SIMPLE BOT INPUT: ", sentences[idx_chosen_sentence])
             # output_chatbot = self._GENERIC_patterns_extractor.respond(sentences[idx_chosen_sentence].text)
             output_chatbot = self.respond_with_simple_bot(sentences[idx_chosen_sentence].text)
 
@@ -493,11 +512,10 @@ class MyBot(Chat):
 
                 # For each clause
                 for idx_clause, clause in enumerate(clauses):
-                    print(f"CLAUSE #{idx_clause}: ", clause)
+                    print(f"SENTENCE #{idx_sent} - CLAUSE #{idx_clause}: ", clause)
 
                     # Get the analysis of the clause
                     SVA = get_analyzed_clause(self._Spacy_model, doc, clause, isQuestion and idx_clause == 0 )
-                    print(SVA)
 
                     # moods = self.get_moods(SVA) # Moods not able to be implemented
 
@@ -588,7 +606,28 @@ if __name__ == "__main__":
             # + "Nodoby can understand me."
             # + "you hate me."
             # + "Do you remember the old John?"
-            + "Does she think about you?"
+            # + "Does she think about you?"
+            # + "Bob visited me and we chatted."
+            # + " Hello, I'm a human. Fine thanks, and you?"
+            # + " Well, I had a bad day."
+            # + " Did you have a bad day? I'm sorry to hear that."
+            # + " It depends. You?"
+            # + " I've already told you that."
+            # + " This is not your business."
+            # + " You are asking too personal questions."
+            # + " We are not friends."
+            # + " Because we aren't."
+            # + " Today is a cloudy day."
+            # + " It might rain soon."
+            # + " Because I'm wrong."
+            # + " I don't talk about that."
+            # + " You can change the question please."
+            # + " Let's talk about music."
+            # + " I'm feeling good."
+            # " I don't want to talk about that. Sorry."
+            # + " Do you play chess?"
+            # " No, I don't think so."
+            " do you know what malloreddus means?"
     )
     hard_coded_case = True
     if hard_coded_case:
