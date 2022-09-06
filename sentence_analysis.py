@@ -71,6 +71,8 @@ def get_full_subject(nlp, doc, clause, isQuestion):
         [{"POS": {"IN": ["PRON", "DET"]}, "DEP":{"IN":["poss", "det"]}}, {"POS": {"IN": ["ADJ", "PUNCT", "CCONJ"]}, "OP": "*"}, {"POS":"NOUN"}, {"POS": "CCONJ", "DEP": "cc"}, {"POS":"PROPN", "DEP":"compound","OP":"?"}, {"POS":"PROPN", "DEP":"nsubj"}],
         # My/The (incredible, smart and brilliant) children
         [{"POS": {"IN": ["PRON", "DET"]}, "DEP":{"IN":["poss", "det"]}}, {"POS": {"IN": ["ADJ", "PUNCT", "CCONJ"]}, "OP": "*"}, {"POS":"NOUN"}], 
+        # Children
+        [{"POS":"NOUN", "DEP":{"IN":["conj","nsubj", "nsubjpass"]}}],
         # # Bob, Paul and I 
         [{"POS": {"IN": ["PROPN", "PUNCT"]}, "OP": "+"},  {"POS": "CCONJ", "DEP": "cc"}, {"POS":"PRON", "DEP":{"IN":["conj","nsubj"]}}],
         # Bob, Paul and (Mr) Robinson
@@ -185,7 +187,11 @@ def get_verb_phrase(nlp, doc, clause):
     # Tok :  n't | Dep_ :  neg | Pos_ :  PART | morph :  Polarity=Neg | tag_ :  RB
     # Tok :  never | Dep_ :  neg | Pos_ :  ADV | morph :    | morph_number  []  | tag_ :  RB | lemma:  never
     # Tok :  so | Dep_ :  amod | Pos_ :  ADV | morph :   | tag_ :  RB
-    [{"POS":{"IN":["AUX","PART","VERB", "ADP", "ADV"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"+"}],
+    [{"POS":{"IN":["AUX","PART","VERB", "ADP", "ADV"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"+"},],
+    #######
+    [{"POS":{"IN":["AUX","PART","VERB", "ADP", "ADV"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"+"},
+    {"POS":"ADP","DEP":"prep"},
+    {"POS":{"IN":["AUX","PART","VERB", "ADP", "ADV"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"+"}],
     # ... what/how to verb ...
     [{"POS":{"IN":["AUX","PART","VERB", "ADP", "ADV"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"+"}, 
     {"LOWER": {"REGEX":"(what|how)"}},
@@ -426,6 +432,15 @@ def get_analyzed_clause(nlp, doc, clause, isQuestion):
             list_new_subj.extend(r)
         subj = [token for token in subj if token.i not in list_new_subj]
     ###
+
+    ### REMOVE PREPOSITIONS FOUND IN THE VERBS FROM THE OBJECTS
+    for obj_item in obj:
+        if len(obj_item)==1:
+            for verb_item in verb:
+                for token in verb_item:
+                    if token.dep_ == "prep":
+                        obj.remove(obj_item)
+    ###
     return (subj, verb, adjs, obj, isQuestion)
 
 
@@ -508,6 +523,7 @@ if __name__ == "__main__":
             + " I've already told you that."
             + " Let's talk about music."
             + " Do you know what malloreddus means?"
+            + " Today is a cloudy day."
 
     )
     txt = preprocessing(nlp, txt)

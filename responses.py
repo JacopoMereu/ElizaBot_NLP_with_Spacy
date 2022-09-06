@@ -64,7 +64,13 @@ complex_pairs = (
             f"Hey %2, I'm Eliza. What do you want to talk about?",
         ),
     ),
+    (
+        rf"{PATTERN_SUBJECTS_EXCEPT_YOU} think(.*)",
         (
+            f"Why {SYM_AUX_REFLECTED_QUESTION} %1 {SYM_VERB_REFLECTED_QUESTION} %2?",
+        ),
+    ),
+    (
         rf"{PATTERN_SUBJECTS_EXCEPT_YOU} {SYM_INPUT_NEG} talk (.+)",
         (
             "Did that strike a nerve?",
@@ -81,7 +87,7 @@ complex_pairs = (
         rf"{PATTERN_SUBJECTS_EXCEPT_YOU} {SYM_INPUT_NEG} like (.+)",
         (
             "Why not?",
-            "Would you say that you have something agains %2?",
+            "Would you say that you have something against %2?",
         ),
     ),
     (
@@ -102,7 +108,7 @@ complex_pairs = (
         (
             "Please, talk to me more about %3.",
             "What kind of place is %3?",
-            "What things can %1 find in %3?",
+            "What things can %1 do in %3?",
             f"Can you detail more why %1 {SYM_VERB_REFLECTED} %2 %3?",
             f"Why {SYM_AUX_REFLECTED_QUESTION} %1 {SYM_VERB_REFLECTED_QUESTION} %2 %3?",
         ),
@@ -190,7 +196,7 @@ simple_pairs = (
         r"(.*)I (.*)(bad|terrible|awesome|nice|great) (day|journey|trip|conversation|meeting)(.*)",
         (
             "How the %2 %3 makes you feel?",
-            "Do you want to talk about the %2 %3?",
+            "Do you want to talk about the %3 %4?",
         ),
     ),
     (

@@ -287,6 +287,8 @@ class MyBot(Chat):
                 # In a non-question the negative part is in the auxiliar after the subject
                 hasNegation = len(verb)>1 and verb[1].dep_ == "neg"
 
+            if hasNegation:
+                verbToSearch = SYM_INPUT_NEG + ' ' + verbToSearch
             originalConjugatedVerb = [verb]
             originalConjugatedVerb = ' '.join([tok.text for tok in originalConjugatedVerb])           
             
@@ -340,41 +342,24 @@ class MyBot(Chat):
         # Question reflection
         if onlyAuxiliar:
             ### Set the interrogative reflection ###
-            reflectedAuxiliarQuestion = reflectedOriginalVerb #V
-            reflectedVerbQuestion = "" #V
-            # if isQuestion:
-            #     if hasNegation:
-            #         reflectedAuxiliarQuestion = reflectedOriginalVerb #V
-            #         reflectedVerbQuestion = "" #V
-            #     else:
-            #         reflectedAuxiliarQuestion = reflectedOriginalVerb #V
-            #         reflectedVerbQuestion = "" #V
-            # else:
-            #     if hasNegation: #V
-            #         reflectedAuxiliarQuestion = reflectedOriginalVerb #V
-            #         reflectedVerbQuestion = "" #V
-            #     else:
-            #         reflectedAuxiliarQuestion = reflectedOriginalVerb #V
-            #         reflectedVerbQuestion = "" #V
+            reflectedAuxiliarQuestion = reflectedOriginalVerb 
+            reflectedVerbQuestion = "" 
         else:
             ### Set the interrogative reflection ###
             if isQuestion:
-                reflectedAuxiliarQuestion = interrogative_auxiliar.text.lower() #V
-                reflectedVerbQuestion = firstMainVerb.lemma_ #V
-                # if hasNegation:
-                #     reflectedAuxiliarQuestion = interrogative_auxiliar.text.lower() #V
-                #     reflectedVerbQuestion = firstMainVerb.lemma_ #V
-                # else:
-                #     reflectedAuxiliarQuestion = interrogative_auxiliar.text.lower() #V
-                #     reflectedVerbQuestion = firstMainVerb.lemma_ #V
+                reflectedAuxiliarQuestion = interrogative_auxiliar.text.lower() 
+                reflectedVerbQuestion = firstMainVerb.lemma_ 
             else:
                 if hasNegation:
-                    reflectedAuxiliarQuestion = auxes.text.lower() #V
-                    reflectedVerbQuestion = firstMainVerb.text.lower() #V
+                    reflectedAuxiliarQuestion = reflectedOriginalVerb.split(' ', 1)[0]
+                    reflectedVerbQuestion = firstMainVerb.text.lower() 
+                elif len(auxes) == 0:
+                    reflectedAuxiliarQuestion = get_interrogative_auxiliar_from_verb(isThirdPerson, firstMainVerb) 
+                    reflectedVerbQuestion = firstMainVerb.lemma_ 
+                # I was thinking --> You were thinking
                 else:
-                    reflectedAuxiliarQuestion = get_interrogative_auxiliar_from_verb(isThirdPerson, firstMainVerb) #V
-                    reflectedVerbQuestion = firstMainVerb.lemma_ #V
-
+                    reflectedAuxiliarQuestion = reflectedOriginalVerb.split(' ', 1)[0]
+                    reflectedVerbQuestion = firstMainVerb.text.lower() 
 
         ### ADJECTIVES (RELATED TO THE VERB) ###
         adjectives_string = ""
@@ -420,6 +405,8 @@ class MyBot(Chat):
 
         ## OUTPUT
         output = subject + ' ' + verbToSearch + adjectives_string + obj
+        output = re.sub(r'\s+', ' ', output)
+
         # print("BOT INPUT ELABORDATED:" , output)
         return (output, {SYM_VERB: originalConjugatedVerb, SYM_VERB_REFLECTED: reflectedOriginalVerb, 
                          SYM_AUX_REFLECTED_QUESTION: reflectedAuxiliarQuestion, SYM_VERB_REFLECTED_QUESTION: reflectedVerbQuestion})
@@ -598,7 +585,7 @@ if __name__ == "__main__":
             # + " Carla drove to the vet's office and retrieved her cat."
             # + " Are you clever?"
             # + " She's got a new car."
-            # + " Were you listening to me or you were doing nothing?"
+            # + " Were you listening to me?"
             # + " Can't you swim?"
             # + " I understand how you can sleep in that position."
             # + " Won't Bob go to the pool tomorrow?"
@@ -607,7 +594,7 @@ if __name__ == "__main__":
             # + "you hate me."
             # + "Do you remember the old John?"
             # + "Does she think about you?"
-            # + "Bob visited me and we chatted."
+            # + "Bob visited me and we chatted about my nightmare."
             # + " Hello, I'm a human. Fine thanks, and you?"
             # + " Well, I had a bad day."
             # + " Did you have a bad day? I'm sorry to hear that."
@@ -621,13 +608,14 @@ if __name__ == "__main__":
             # + " It might rain soon."
             # + " Because I'm wrong."
             # + " I don't talk about that."
-            # + " You can change the question please."
+            # + " Can you change the question please?"
             # + " Let's talk about music."
             # + " I'm feeling good."
             # " I don't want to talk about that. Sorry."
             # + " Do you play chess?"
             # " No, I don't think so."
-            " do you know what malloreddus means?"
+            # " I was thinking about going to the gym."
+            # + " I couldn't understand how you can sleep in that position."
     )
     hard_coded_case = True
     if hard_coded_case:
