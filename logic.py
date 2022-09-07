@@ -616,6 +616,7 @@ if __name__ == "__main__":
             # " No, I don't think so."
             # " I was thinking about going to the gym."
             # + " I couldn't understand how you can sleep in that position."
+            + " Yesteday I felt so happy after I picked up my new car, but then I felt so sad because I was forced to leave it at home."
     )
     hard_coded_case = True
     if hard_coded_case:

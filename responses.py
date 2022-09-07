@@ -65,6 +65,12 @@ complex_pairs = (
         ),
     ),
     (
+        rf"{PATTERN_SUBJECTS_EXCEPT_YOU} force(.*)",
+        (
+            f"Why {SYM_AUX_REFLECTED_QUESTION} %1 {SYM_VERB_REFLECTED_QUESTION} %2?",
+        ),
+    ),
+    (
         rf"{PATTERN_SUBJECTS_EXCEPT_YOU} think(.*)",
         (
             f"Why {SYM_AUX_REFLECTED_QUESTION} %1 {SYM_VERB_REFLECTED_QUESTION} %2?",

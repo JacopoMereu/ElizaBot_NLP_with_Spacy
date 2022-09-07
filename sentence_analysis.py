@@ -50,6 +50,9 @@ def preprocessing(nlp, input):
         # Replace the comma with a fullstop followed by a space
         input = re.sub(rf',\s*(?={match_string})', '. ', input)
 
+    # Remove the remaining , => it might bring to a wrong sents creation
+    # input = re.sub(r',', '', input)
+
     return input
 
 def get_full_subject(nlp, doc, clause, isQuestion):
@@ -183,26 +186,24 @@ def get_verb_phrase(nlp, doc, clause):
     Returns:
         List of Spacy span: The list containing the verbs. The eventually auxiliar verbs is at the beginning.
     """    
+    generic_verb_min_one = {"POS":{"IN":["AUX","PART","VERB", "ADP", "ADV"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"+"}
+    generic_verb_optional = {"POS":{"IN":["AUX","PART","VERB", "ADP", "ADV"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"*"}
     verb_patterns = [
-    # Tok :  n't | Dep_ :  neg | Pos_ :  PART | morph :  Polarity=Neg | tag_ :  RB
-    # Tok :  never | Dep_ :  neg | Pos_ :  ADV | morph :    | morph_number  []  | tag_ :  RB | lemma:  never
-    # Tok :  so | Dep_ :  amod | Pos_ :  ADV | morph :   | tag_ :  RB
-    [{"POS":{"IN":["AUX","PART","VERB", "ADP", "ADV"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"+"},],
-    #######
-    [{"POS":{"IN":["AUX","PART","VERB", "ADP", "ADV"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"+"},
-    {"POS":"ADP","DEP":"prep"},
-    {"POS":{"IN":["AUX","PART","VERB", "ADP", "ADV"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"+"}],
-    # ... what/how to verb ...
-    [{"POS":{"IN":["AUX","PART","VERB", "ADP", "ADV"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"+"}, 
-    {"LOWER": {"REGEX":"(what|how)"}},
-    {"POS":{"IN":["AUX","PART","VERB", "ADP"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"+"}],
-    # ... VERB(non-aux) (what/how)? you aux/verb...
-    [{"POS":{"IN":["AUX","PART","VERB", "ADP", "ADV"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"*"},
-     {"POS":{"IN":["VERB", "ADP"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"+"},
-    {"LOWER": {"REGEX":"(what|how)"}, "OP":"?"},
-    {"POS":"PRON"},
-    {"POS":{"IN":["AUX","PART","VERB", "ADP", "ADV"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"+"}],
-    ##
+        [generic_verb_min_one],
+        #######
+        [generic_verb_min_one,
+        {"POS":"ADP","DEP":"prep"}, # singular preposition
+        generic_verb_min_one],
+        # ... verb1 what/how to verb2 ...
+        [generic_verb_min_one, 
+        {"LOWER": {"REGEX":"(what|how)"}},
+        generic_verb_min_one],
+        # ... VERB(non-aux) (what/how)? you aux/verb...
+        [generic_verb_optional,
+        {"POS":{"IN":["VERB", "ADP"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"+"}, # end with a main verb before the what/how
+        {"LOWER": {"REGEX":"(what|how)"}, "OP":"?"},
+        {"POS":{"IN":["PRON", "PROPN"]}},
+        generic_verb_min_one],
     ]
     # Get the matches
     matcher = Matcher(nlp.vocab)
@@ -331,9 +332,14 @@ def get_clauses(nlp, doc, sentence):
     ]
 
     conj_patterns = [
-        [{"POS":{"IN":["PRON", "PROPN"]}},{"POS":{"IN":["AUX","VERB"]}},{"OP":"*"},
-        {"TAG":"CC"},{"POS":"ADV", "DEP":"advmod", "OP":"?"}, 
-        {"POS":"PRON"}, {"POS":{"IN":["AUX","VERB"]}}]
+        [{"POS":{"IN":["PRON", "PROPN"]}}, #first subject
+        {"POS":{"IN":["AUX","VERB"]}}, #first verb
+        {"OP":"*"}, # anything
+        {"TAG":"CC"}, # conjunction
+        {"POS":"ADV", "DEP":"advmod", "OP":"?"}, #optional adv
+        {"POS":"PRON"},  #pronoun
+        {"POS":{"IN":["AUX","VERB"]}}], # verb
+        ## 
     ]
 
     # Add the first pattern and get the matches
@@ -356,7 +362,9 @@ def get_clauses(nlp, doc, sentence):
                 start2 = idx_s+start
                 end2 = start2 + 1
                 # e.g. and then
-                end2 += 1 if doc[token.i+1].dep_ == "advmod" else 0
+                if doc[token.i+1].dep_ == "advmod":
+                    end2 += 1
+                    matches = [(idx, start, end) for (idx, start, end) in matches if start != token.i+1]
                 break
         # Creates the span for the conjunction
         new_span = (idx, start2, end2)
@@ -377,9 +385,10 @@ def get_clauses(nlp, doc, sentence):
     for j, (match_id, start, end) in enumerate(matches):
         start2 = start + sentence[0].i
         end2 = end + sentence[0].i
+
         # If it's the first match
         if j==0:
-            last_end2=end2
+
             # If the match is at the beginning of the sentence, skip
             if sentence[0].i==start2:
                 continue
@@ -388,6 +397,7 @@ def get_clauses(nlp, doc, sentence):
         else:
             # Chunk = token after the last match to the token before the current match
             output_clauses.append(doc[last_end2:start2])
+        last_end2=end2
     
     # Chunk = the token after the last match to the end of the sentence
     last_match = matches[-1]
@@ -497,7 +507,7 @@ if __name__ == "__main__":
             + " The ladies were happy because they reached the wonderful mall."
             + " Yesterday I helped a nice and charismatic old woman."
             + " At the beginning I was sad, then I was happy."
-            + " Carla drove to the vet's office and retrieved her cat."
+            + " Carla drove to my office and collected my keys."
             + " She's so clever."
             + " She's got a new car."
             + " Were you listening to me or you were doing nothing?"
@@ -524,7 +534,7 @@ if __name__ == "__main__":
             + " Let's talk about music."
             + " Do you know what malloreddus means?"
             + " Today is a cloudy day."
-
+            + " I don't understand how Bob could say something that cruel about me."
     )
     txt = preprocessing(nlp, txt)
     doc = nlp(txt)
