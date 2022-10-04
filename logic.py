@@ -1,8 +1,11 @@
+# from email.policy import default # No idea what this is.
 import spacy
 import random
 from nltk.chat.util import Chat
+from NLTK_Chat_modified import Chat_with_emotion_rules
 from responses import *
 from sentence_analysis import get_analyzed_clause, get_clauses, preprocessing, get_interrogative_auxiliar_from_verb
+from emotion_analyzer_classifier import MyEmotionAnalyzer
 import re
 
 NOT_MANANGEABLE_TEXT_LIST = ["Let's"]
@@ -13,7 +16,7 @@ class MyBot(Chat):
         super().__init__(complex_pairs, my_reflections)
 
         # Create a bot for generic patterns
-        self._GENERIC_patterns_extractor = Chat(simple_pairs, my_reflections)
+        self._GENERIC_patterns_extractor = Chat_with_emotion_rules(simple_pairs, my_reflections)
 
         # Memory = (string: key, string: information, boolean: is_used)
         self._MEMORY = list()
@@ -22,6 +25,16 @@ class MyBot(Chat):
 
         # Load the largest and accurate Spacy English model
         self._Spacy_model = spacy.load("en_core_web_lg")
+        # # Add pipe and patterns for semi-modals not found by spacy model
+        # ruler = self._Spacy_model.add_pipe("entity_ruler")
+        # patterns = [
+        #         {"id": "special_modal", "label":"be-going-to-verb", "pattern":[ {"LEMMA": "be"}, {"LOWER": "going"}, {"LOWER": "to", "TAG":"TO"}, {"POS":"VERB"}]},
+        #         {"id": "special_modal", "label":"have-to-verb", "pattern":[ {"DEP": "ROOT", "POS": "VERB", "LEMMA": "have"}, {"LOWER": "to", "TAG":"TO"}, {"POS":"VERB"}]},
+        #         ]
+        # ruler.add_patterns(patterns)
+
+        # Load the emotion analyzer
+        self._emotion_analyzer = MyEmotionAnalyzer()
 
         # Load the list of moods
         """ EDIT: It's no longer used: check below for details
@@ -275,7 +288,8 @@ class MyBot(Chat):
         if onlyAuxiliar:
             # List of tuple (verb, index). Actually it's a list of tuples with only one element
             mainVerbsList = [(tok, i) for i, tok in enumerate(verb) if tok.dep_ in ["ROOT"]]
-            assert len(mainVerbsList) > 0 # Cannot be empty
+            if len(mainVerbsList) == 0: # Cannot be empty
+                return ""
             firstMainVerb = mainVerbsList[0][0] # Take the verb of the first tuple
             verbToSearch = firstMainVerb.lemma_ # We want to search the lemma of the verb
 
@@ -448,17 +462,25 @@ class MyBot(Chat):
         Returns:
             string: the output produced by the simple bot, None if nothing was matches
         """
-        # Remove punctuation
-        input_chatbot_modified = re.sub(r'[^\w\s]','',input_chatbot)
-        output_chatbot = self._GENERIC_patterns_extractor.respond(input_chatbot_modified)
+        # Remove punctuation except ' (we want to preserve 'm/'d/...)
+        input_chatbot_modified = re.sub(r"[^\w\s\d']",'',input_chatbot)
+        print("BOT INPUT MODIFIED:" , input_chatbot_modified)
+        
+        # Get the emotion
+        emotion = self._emotion_analyzer.get_emotion(input_chatbot_modified)
+        print("I found the emotion: ["+ emotion+']')
+
+        # Get the response
+        output_chatbot = self._GENERIC_patterns_extractor.respond(input_chatbot_modified, emotion=emotion)
         
         # If the bot doesn't understand the input and the input was a question, return a random default answer
         if output_chatbot is None and input_chatbot[-1] == "?":
-            output_chatbot = random.choice([
+            default_answers = [
             "Why do you ask that?",
             "Please consider whether you can answer your own question.",
             "Perhaps the answer lies within yourself?",
-            "Why don't you tell me?",])
+            "Why don't you tell me?"]
+            output_chatbot = random.choice(default_answers)
     
         return output_chatbot
 
@@ -616,7 +638,10 @@ if __name__ == "__main__":
             # " No, I don't think so."
             # " I was thinking about going to the gym."
             # + " I couldn't understand how you can sleep in that position."
-            + " Yesteday I felt so happy after I picked up my new car, but then I felt so sad because I was forced to leave it at home."
+            # + " Yesteday I felt so happy after I picked up my new car, but then I felt so sad because I was forced to leave it at home."
+            # + "You surprise me."
+            + " You're wonderful."
+
     )
     hard_coded_case = True
     if hard_coded_case:

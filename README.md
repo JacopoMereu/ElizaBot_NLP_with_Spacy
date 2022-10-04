@@ -11,6 +11,7 @@
     <li>python -m spacy download en_core_web_lg</li>
     <li>pip install numpy</li>
     <li>pip install nltk</li>
+    <li>pip install transformers</li>
     </ul>
 
 <br>
@@ -24,6 +25,17 @@
                             <br>&emsp;&emsp;The <i>hard_coded_case</i> flag let the bot respond to an hard-coded input. Disable it if you want to chat with the bot via terminal.</li>
     <br>
     <li><b><i>sentence_analysis.py</i></b> contains all the functions used to analyze the user input text with Spacy.</li>
-    <li><b><i>responses.py</i></b> contains the patterns/responses rules and the bot reflections.</li>
+    <br>
+    <li><b><i>emotion_analyzer_classifier.py</i></b> allows to load a pre-trained emotion classifier using the Transforms API.</li>
+    <li><b><i>NLTK_Chat_modified.py</i></b> is a modified version of NLTK Chat that allows me to create more sophisticated pairs/rules pattern->responses.</li>
+    <li><b><i>responses.py</i></b> contains
+    <ul>
+    <li>the specific patterns/responses rules ;</li>
+    <li>the generic patterns/responses rules (these responses are emotion-sensitive) ;</li>
+    <li>the memory patterns/responses rules (it allows to create a sentence given a memory frag); </li>
+    <li>the reflections used to reflect pronouns and eventually the verb associated to them.</li>
+    </ul>
+    </li>
+    <br>
     <li><b><i>my_secrets.py</i></b> should contain the bot's token given by the @BotFather.</li>
     </ul>

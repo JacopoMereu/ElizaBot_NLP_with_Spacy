@@ -13,6 +13,7 @@ numpy = "*"
 spacy-transformers = "*"
 unidecode = "*"
 nltk = "*"
+transformers = "*"
 
 [dev-packages]
 

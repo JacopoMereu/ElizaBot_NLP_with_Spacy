@@ -186,24 +186,26 @@ def get_verb_phrase(nlp, doc, clause):
     Returns:
         List of Spacy span: The list containing the verbs. The eventually auxiliar verbs is at the beginning.
     """    
-    generic_verb_min_one = {"POS":{"IN":["AUX","PART","VERB", "ADP", "ADV"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"+"}
+    generic_verb_min_one = {"POS":{"IN":["AUX","VERB"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"+"}
+    generic_verb_or_adv_any = {"POS":{"IN":["AUX","PART","VERB", "ADP", "ADV"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"*"}
+
     generic_verb_optional = {"POS":{"IN":["AUX","PART","VERB", "ADP", "ADV"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"*"}
     verb_patterns = [
-        [generic_verb_min_one],
+        [generic_verb_or_adv_any, generic_verb_min_one,generic_verb_or_adv_any],
         #######
-        [generic_verb_min_one,
+        [generic_verb_or_adv_any, generic_verb_min_one,generic_verb_or_adv_any,
         {"POS":"ADP","DEP":"prep"}, # singular preposition
-        generic_verb_min_one],
+        generic_verb_or_adv_any, generic_verb_min_one,generic_verb_or_adv_any],
         # ... verb1 what/how to verb2 ...
-        [generic_verb_min_one, 
+        [generic_verb_or_adv_any, generic_verb_min_one,generic_verb_or_adv_any, 
         {"LOWER": {"REGEX":"(what|how)"}},
-        generic_verb_min_one],
+        generic_verb_or_adv_any, generic_verb_min_one,generic_verb_or_adv_any],
         # ... VERB(non-aux) (what/how)? you aux/verb...
         [generic_verb_optional,
         {"POS":{"IN":["VERB", "ADP"]},"TAG": {"IN": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "RB", "MD", "TO"]}, "OP":"+"}, # end with a main verb before the what/how
         {"LOWER": {"REGEX":"(what|how)"}, "OP":"?"},
         {"POS":{"IN":["PRON", "PROPN"]}},
-        generic_verb_min_one],
+        generic_verb_or_adv_any, generic_verb_min_one,generic_verb_or_adv_any],
     ]
     # Get the matches
     matcher = Matcher(nlp.vocab)
@@ -482,7 +484,8 @@ def get_interrogative_auxiliar_from_verb(isThirdPerson, verb):
 
 if __name__ == "__main__":
     nlp = spacy.load("en_core_web_lg")
-    txt = ("My smart, incredible and brilliant friends and she went to the mall, then we went to the magnificent grocery store."
+    txt = ( ""
+            "My smart, incredible and brilliant friends and she went to the mall, then we went to the magnificent grocery store."
             + " Bob, Mario and Jessie went to the U.S.A. I couldn't believe it"
             +" I'm startving!"
             +" Would I eat a bear?"
@@ -514,10 +517,10 @@ if __name__ == "__main__":
             + " Can't you swim?"
             + " I don't understand how to sleep in that position like you do."
             + " I don't think you can act like that."
-            # + " Are you guys going to go to the pool tomorrow?"
-            # + " Bob's so clever."
-            # + " Bob's starving."
-            # + " I don't think I can do that."
+            + " Are you guys going to go to the pool tomorrow?"
+            + " Bob's so clever."
+            + " Bob's starving."
+            + " I don't think I can do that."
             + "I went at home yesteday."
             + " I'm Jacob."
             + " My name is Bob."
@@ -535,6 +538,7 @@ if __name__ == "__main__":
             + " Do you know what malloreddus means?"
             + " Today is a cloudy day."
             + " I don't understand how Bob could say something that cruel about me."
+
     )
     txt = preprocessing(nlp, txt)
     doc = nlp(txt)
