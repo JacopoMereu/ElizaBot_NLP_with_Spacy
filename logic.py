@@ -7,6 +7,8 @@ from responses import *
 from sentence_analysis import get_analyzed_clause, get_clauses, preprocessing, get_interrogative_auxiliar_from_verb
 from emotion_analyzer_classifier import MyEmotionAnalyzer
 import re
+import json
+import time
 
 NOT_MANANGEABLE_TEXT_LIST = ["Let's"]
 
@@ -218,7 +220,7 @@ class MyBot(Chat):
         ### SUBJECT SECTION ###
         # Convert the subject into a pronoun string if it's possible
         nouns = [tok for tok in subject if tok.pos_ == "NOUN"]
-        prons = [tok for tok in subject if tok.pos_ == "PRON" and tok.tag_ in ["PRP", "DT"]]
+        prons = [tok for tok in subject if tok.pos_ == "PRON" and tok.tag_ in ["NN","NNS", "PRP", "DT"]]
         propns = [tok for tok in subject if tok.pos_ == "PROPN" and tok.dep_ == "nsubj"]
 
         pron_dict = {'i':False, 'you':False, 'he':False, 'she':False, 'it':False, 'we':False, 'they':False,
@@ -253,7 +255,8 @@ class MyBot(Chat):
             isThirdPerson = True
             # I/you/she/he/it
             if len(prons) > 0:
-                subject = [key for key, value in pron_dict.items() if value == True][0]
+                subject_pronouns_used = [key for key, value in pron_dict.items() if value == True]
+                subject = prons[0].lower_ if subject_pronouns_used == [] else subject_pronouns_used[0]
                 subject = 'I' if subject == 'i' else subject
             else:
                 # NOUNS: Children, Book, Cat, ...
@@ -403,13 +406,13 @@ class MyBot(Chat):
                         obj_text.append(tok.text)
             obj = ' '.join(obj_text)
 
-            # Remove the adjectives related to the object
-            for key, value in adjs.items():
-                first = value[0].i
-                last = value[-1].i
-                string_to_remove = doc[first:last+1].text
-                obj = re.sub(rf"{string_to_remove}", '', obj)
-                obj = re.sub(r'\s+', ' ', obj)
+            # # Remove the adjectives related to the object
+            # for key, value in adjs.items():
+            #     first = value[0].i
+            #     last = value[-1].i
+            #     string_to_remove = doc[first:last+1].text
+            #     obj = re.sub(rf"{string_to_remove}", '', obj)
+            #     obj = re.sub(r'\s+', ' ', obj)
 
             obj = " " + obj
 
@@ -643,19 +646,26 @@ if __name__ == "__main__":
             + " You're wonderful."
 
     )
-    hard_coded_case = True
+    hard_coded_case = False
     if hard_coded_case:
         response = _EXTERNAL_CHATBOT.respond(text.strip())
         print("bot:", response)
         exit()
     else:
         print("Hi I'm Eliza. What's up?")
+        JSON = {"conversation": []}
         while True:
             try:
                 user_input = input(">")
                 response = _EXTERNAL_CHATBOT.respond(user_input.strip())
                 print("bot:", response)
                 print("")
+                JSON["conversation"].append({"user": user_input, "bot": response})
             except(KeyboardInterrupt, SystemExit):
                 print("goodbye!")
                 break
+
+        JSON["N_rounds"]=-1
+        output_conversation_folder = "saved_conversations"
+        with open(f'{output_conversation_folder}/MyBot_conversation{time.strftime("%Y%m%d-%H%M%S")}.json', 'w') as fp:
+            json.dump(JSON, fp)

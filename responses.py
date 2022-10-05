@@ -80,6 +80,12 @@ complex_pairs = (
         ),
     ),
     (
+        rf"{PATTERN_SUBJECTS_EXCEPT_YOU} have(.*)",
+        (
+            f"Why {SYM_AUX_REFLECTED_QUESTION} %1 {SYM_VERB_REFLECTED_QUESTION} %2?",
+        ),
+    ),
+    (
         rf"{PATTERN_SUBJECTS_EXCEPT_YOU} think(.*)",
         (
             f"Why {SYM_AUX_REFLECTED_QUESTION} %1 {SYM_VERB_REFLECTED_QUESTION} %2?",
@@ -166,6 +172,12 @@ complex_pairs = (
         rf"{PATTERN_SUBJECTS_EXCEPT_YOU}(?: {SYM_INPUT_NEG})? help (.*)",
         (
             f"The fact %1 {SYM_VERB_REFLECTED} %2 makes you reflect?",
+        ),
+    ),
+        (
+        rf"{PATTERN_SUBJECTS_EXCEPT_YOU}(?: {SYM_INPUT_NEG})? seem (.+)",
+        (
+            f"Why are you saying %1 {SYM_VERB_REFLECTED} %2?",
         ),
     ),
     (
@@ -647,7 +659,7 @@ memory_pairs = (
         rf"{SYM_MEMORY_KEY} (.*) {SYM_MEMORY_VALUE} (.*)",
         (
             "Before you described %1 as %2. Can you go more deep about that?",
-            "Earlier you used words like %2 to describe %1. Why is that?",
+            "You said %2 %1. Why is that?",
         ),
     ),
 )
