@@ -1,0 +1,34 @@
+{
+    "conversation": [
+        {
+            "user": "I don't where to begin.",
+            "bot": "Don't you really where to begin?"
+        },
+        {
+            "user": "There are just so many topics to be covering!",
+            "bot": "Very interesting. Can you tell me more?"
+        },
+        {
+            "user": "Games. You see. I could be reviewing videogames as we speak! But I fear ... more are released then I can write up.",
+            "bot": "Let's change focus a bit... Tell me about your family."
+        },
+        {
+            "user": "Why do you want to change the topic! It was important to me.",
+            "bot": "Why are you saying it was important to you?"
+        },
+        {
+            "user": "Because it's my job!",
+            "bot": "Why are you saying it's your job?"
+        },
+        {
+            "user": "Because it is.",
+            "bot": "If it is, what else must be true?"
+        },
+        {
+            "user": "Bye",
+            "bot": "Let's change focus a bit... Tell me about your friends."
+        }
+    ],    
+    "N_rounds": 5,
+    "reason": "Low sense"
+}

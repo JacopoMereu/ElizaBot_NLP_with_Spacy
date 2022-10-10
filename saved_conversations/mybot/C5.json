@@ -1,0 +1,38 @@
+{
+    "conversation": [
+        {
+            "user": "Hi. I wanted to talk about my weekend. It was devastating.",
+            "bot": "Why are you saying it was devastating?"
+        },
+        {
+            "user": "My bestefriend Carla and I wanted to go shopping. We wanted to take the bus to go to the city but it never arrived to the bus stop.",
+            "bot": "Very interesting. Can you tell me more?"
+        },
+        {
+            "user": "We decided to eat an icecream in a place nearby...but it was closed!",
+            "bot": "How do you feel when you say that?"
+        },
+        {
+            "user": "I'M SO ANGRY!",
+            "bot": "How long have you been so angry?"
+        },
+        {
+            "user": "Three days.",
+            "bot": "How does that make you feel?"
+        },
+        {
+            "user": "You already asked...",
+            "bot": "Why do you care whether I already asked?"
+        },
+        {
+            "user": "Because it's boring me.",
+            "bot": "Does that reason apply to anything else?"
+        },
+        {
+            "user": "Bye",
+            "bot": "Let's change focus a bit... Tell me about your family."
+        }
+    ],    
+    "N_rounds": 5,
+    "reason": "Asking information that is already known"
+}

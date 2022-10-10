@@ -1,0 +1,25 @@
+{
+    "generated_text": "I'm talking about happiness!",
+    "conversation": {
+      "generated_responses": [
+        "Hi! :D",
+        "It does!",
+        "I don't know, but I'm sure you can find a way!",
+        "I'm talking about happiness!",
+        "I'm talking about happiness!"
+      ],
+      "past_user_inputs": [
+        "Hi",
+        "Does money buy happiness?",
+        "What is the best way to buy happiness?",
+        "What are you talking about?",
+        "You've just said that you don't know."
+      ]
+    },
+    "warnings": [
+      "Setting `pad_token_id` to `eos_token_id`:50256 for open-end generation.",
+      "The attention mask and the pad token id were not set. As a consequence, you may observe unexpected behavior. Please pass your input's `attention_mask` to obtain reliable results."
+    ],
+    "N_rounds": 4,
+    "reason": "repetition"
+  }

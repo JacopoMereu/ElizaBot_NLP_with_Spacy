@@ -1,0 +1,34 @@
+{
+    "conversation": [
+        {
+            "user": "I'm having a hard time.",
+            "bot": "Why are you having a hard time?"
+        },
+        {
+            "user": "Because of you! There are just too many versions of Eliza.",
+            "bot": "Before you described time as hard. Can you go more deep about that?"
+        },
+        {
+            "user": "It's all your fault!",
+            "bot": "Why are you saying it's all my fault?"
+        },
+        {
+            "user": "Why do you have so many versions?",
+            "bot": "Why do you think do I have so many versions?"
+        },
+        {
+            "user": "I don't know. We should ask to your father.",
+            "bot": "How do you feel about your father?"
+        },
+        {
+            "user": "We were talking about YOUR father.",
+            "bot": "How does this relate to your feelings today?"
+        },
+        {
+            "user": "Stop reflecting everything on me.",
+            "bot": "You said many versions. Why is that?"
+        }
+    ],    
+    "N_rounds": 7,
+    "reason": "Asking information that is already known"
+}

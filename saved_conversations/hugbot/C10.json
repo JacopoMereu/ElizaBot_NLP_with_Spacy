@@ -1,0 +1,25 @@
+{
+    "generated_text": "I'm sorry to hear that.",
+    "conversation": {
+      "generated_responses": [
+        "Hi! :D",
+        "I'm sorry to hear that.",
+        "I'm sorry to hear that.",
+        "I'm sorry to hear that.",
+        "I'm sorry to hear that."
+      ],
+      "past_user_inputs": [
+        "Hi",
+        "I had a terrible day.",
+        "Today the school principal suspended me...",
+        "My parent grounded me for an entire month!",
+        "Well, what do you think about it?"
+      ]
+    },
+    "warnings": [
+      "Setting `pad_token_id` to `eos_token_id`:50256 for open-end generation.",
+      "The attention mask and the pad token id were not set. As a consequence, you may observe unexpected behavior. Please pass your input's `attention_mask` to obtain reliable results."
+    ],
+    "N_rounds": 2,
+    "reason": "repetition"
+  }

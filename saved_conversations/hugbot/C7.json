@@ -1,0 +1,27 @@
+{
+    "generated_text": "I'm sorry, I'm not sure what you mean.",
+    "conversation": {
+      "generated_responses": [
+        "Hi! :D",
+        "I'm glad you asked!",
+        "I'm sorry, I'm not sure what you mean.",
+        "I'm sorry, I'm not sure what you mean.I'm sorry",
+        "I'm sorry, I'm not sure what you mean.",
+        "I'm sorry, I'm not sure what you mean."
+      ],
+      "past_user_inputs": [
+        "Hi",
+        "Nice to meet you. I wanted to ask you something.",
+        "Lately I've been kinda sad. Can you help me to understand the reason?",
+        "I mean...it's your job.",
+        "Can you help me to understand why I am sad?",
+        "Ok, let's change topic."
+      ]
+    },
+    "warnings": [
+      "Setting `pad_token_id` to `eos_token_id`:50256 for open-end generation.",
+      "The attention mask and the pad token id were not set. As a consequence, you may observe unexpected behavior. Please pass your input's `attention_mask` to obtain reliable results."
+    ],
+    "N_rounds": 5,
+    "reason": "repetition"
+  }

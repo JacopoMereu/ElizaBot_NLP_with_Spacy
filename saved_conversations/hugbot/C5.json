@@ -1,0 +1,31 @@
+{
+    "generated_text": "Bye",
+    "conversation": {
+      "generated_responses": [
+        "Hi! :D",
+        "I'm sorry to hear that. I hope you can find a new place to live.",
+        "I think he's talking about the fact that you're still here.",
+        "I'm here.",
+        "I am here.",
+        "I broke myself.",
+        "I'm here.",
+        "Bye"
+      ],
+      "past_user_inputs": [
+        "Hi",
+        "Hi. I wanted to talk about my weekend. It was devastating.",
+        "What? I still have a place to live in. What are you talking about?",
+        "How many of you are there?",
+        "Are you alone?",
+        "Did you break yourself again?",
+        "I'm sorry to hear that.",
+        "Bye"
+      ]
+    },
+    "warnings": [
+      "Setting `pad_token_id` to `eos_token_id`:50256 for open-end generation.",
+      "The attention mask and the pad token id were not set. As a consequence, you may observe unexpected behavior. Please pass your input's `attention_mask` to obtain reliable results."
+    ],
+    "N_rounds": 3,
+    "reason": "repetition and odd answers"
+  }

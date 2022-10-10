@@ -1,0 +1,27 @@
+{
+    "generated_text": "Bye!",
+    "conversation": {
+      "generated_responses": [
+        "Hi! :D",
+        "Sure! :D",
+        "I'm sorry!",
+        "I'm sorry!",
+        "I'm sorry!",
+        "Bye!"
+      ],
+      "past_user_inputs": [
+        "Hi",
+        "Can I talk about my problems?",
+        "Due to on going exams in college, I have a lot of stress.",
+        "I think I won't be able to pass all my tests.",
+        "Are you really listening to me?",
+        "Bye"
+      ]
+    },
+    "warnings": [
+      "Setting `pad_token_id` to `eos_token_id`:50256 for open-end generation.",
+      "The attention mask and the pad token id were not set. As a consequence, you may observe unexpected behavior. Please pass your input's `attention_mask` to obtain reliable results."
+    ],
+    "N_rounds": 4,
+    "reason": "repetition"
+  }

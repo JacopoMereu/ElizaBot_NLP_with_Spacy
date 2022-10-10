@@ -1,0 +1,34 @@
+{
+    "conversation": [
+        {
+            "user": "Can I talk about my problems?",
+            "bot": "If you could talk about your problems, would you?"
+        },
+        {
+            "user": "Of course. That's why I asked you the permission.",
+            "bot": "I see. Please go on."
+        },
+        {
+            "user": "Due to on going exams in college, I have a lot of stress.",
+            "bot": "Why do you have a lot of stress?"
+        },
+        {
+            "user": "I think I won't be able to pass all my tests.",
+            "bot": "But you're not sure you won't be able to pass all your tests?"
+        },
+        {
+            "user": "Well...no.",
+            "bot": "Very interesting. Can you tell me more?"
+        },
+        {
+            "user": "Are you really listening to me?",
+            "bot": "What makes you think I really listening to you?"
+        },
+        {
+            "user": "Bye",
+            "bot": "Let's change focus a bit... Tell me about your friends."
+        }
+    ],    
+    "N_rounds": 6,
+    "reason": "Low sense"
+}

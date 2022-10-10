@@ -1,0 +1,18 @@
+{
+    "conversation": [
+        {
+            "user": "Does money buy happiness?",
+            "bot": "Why don't you tell me?"
+        },
+        {
+            "user": "What is the best way to buy happiness?",
+            "bot": "What do you think?"
+        },
+        {
+            "user": "I'm asking it to you.",
+            "bot": "Did you come to me because you are asking it to I?"
+        }
+    ],
+    "N_rounds": 3,
+    "reason": "Low sense and huge grammar error"
+}

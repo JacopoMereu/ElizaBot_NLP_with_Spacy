@@ -666,6 +666,6 @@ if __name__ == "__main__":
                 break
 
         JSON["N_rounds"]=-1
-        output_conversation_folder = "saved_conversations"
+        output_conversation_folder = "saved_conversations/mybot"
         with open(f'{output_conversation_folder}/MyBot_conversation{time.strftime("%Y%m%d-%H%M%S")}.json', 'w') as fp:
             json.dump(JSON, fp)

@@ -1,0 +1,29 @@
+{
+    "generated_text": "I'm listening to you.",
+    "conversation": {
+      "generated_responses": [
+        "Hi! :D",
+        "I don't where to end.",
+        "I'm sure you'll find something.",
+        "I'm sure you'll find something.",
+        "I'm listening to you.",
+        "I'm listening to you.",
+        "I'm listening to you."
+      ],
+      "past_user_inputs": [
+        "Hi",
+        "I don't where to begin.",
+        "There are just so many topics to be covering!",
+        "Games. You see. I could be reviewing videogames as we speak! But I fear ... more are released then I can write up.",
+        "Are you listening to me?",
+        "Good. Can you give me an advice then?",
+        "Hello? Can you help me?"
+      ]
+    },
+    "warnings": [
+      "Setting `pad_token_id` to `eos_token_id`:50256 for open-end generation.",
+      "The attention mask and the pad token id were not set. As a consequence, you may observe unexpected behavior. Please pass your input's `attention_mask` to obtain reliable results."
+    ],
+    "N_rounds": 5,
+    "reason": "repetition"
+  }

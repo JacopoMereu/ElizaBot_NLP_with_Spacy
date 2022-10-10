@@ -1,0 +1,27 @@
+{
+    "generated_text": "I'm psychic.",
+    "conversation": {
+      "generated_responses": [
+        "Hi! :D",
+        "I know, I'm sorry.",
+        "I'm a psychic.",
+        "I'm psychic.",
+        "I'm a psychic.",
+        "I'm psychic."
+      ],
+      "past_user_inputs": [
+        "Hi",
+        "Everything bothers me lately.",
+        "How do you know that?",
+        "You are right.",
+        "How did you become a psychic?",
+        "Ok"
+      ]
+    },
+    "warnings": [
+      "Setting `pad_token_id` to `eos_token_id`:50256 for open-end generation.",
+      "The attention mask and the pad token id were not set. As a consequence, you may observe unexpected behavior. Please pass your input's `attention_mask` to obtain reliable results."
+    ],
+    "N_rounds": 5,
+    "reason": "repetition"
+  }

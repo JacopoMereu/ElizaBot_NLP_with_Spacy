@@ -1,0 +1,26 @@
+{
+    "conversation": [
+        {
+            "user": "Nice to meet you. I wanted to ask you something.",
+            "bot": "Are you sure you wanted to ask me something?"
+        },
+        {
+            "user": "Of course I am! Lately I've been kinda sad. Can you help me to understand the reason?",
+            "bot": "What makes you think I help you?"
+        },
+        {
+            "user": "I mean...it's your job.",
+            "bot": "Why are you saying it's my job?"
+        },
+        {
+            "user": "Becayse you are a psychoterapist!",
+            "bot": "Very interesting. Can you tell me more?"
+        },
+        {
+            "user": "Bye",
+            "bot": "Let's change focus a bit... Tell me about your family."
+        }
+    ],
+    "N_rounds": 4,
+    "reason": "Low sense"
+}

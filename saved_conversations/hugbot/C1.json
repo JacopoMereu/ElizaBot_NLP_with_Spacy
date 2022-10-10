@@ -1,0 +1,25 @@
+{
+    "generated_text": "I'm annoying you.",
+    "conversation": {
+      "generated_responses": [
+        "Hi! :D",
+        "I'm having a deja vu.",
+        "I'm repeating you.",
+        "I'm annoying you.",
+        "I'm annoying you."
+      ],
+      "past_user_inputs": [
+        "Hi",
+        "I'm having a deja vu.",
+        "Are you repeating me?",
+        "That's annoying.",
+        "Yes..."
+      ]
+    },
+    "warnings": [
+      "Setting `pad_token_id` to `eos_token_id`:50256 for open-end generation.",
+      "The attention mask and the pad token id were not set. As a consequence, you may observe unexpected behavior. Please pass your input's `attention_mask` to obtain reliable results."
+    ],
+    "N_rounds": 4,
+    "reason": "repetition"
+  }

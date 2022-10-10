@@ -1,0 +1,18 @@
+{
+    "conversation": [
+        {
+            "user": "Hi, nice to meet you.",
+            "bot": "Hi there... how are you today?"
+        },
+        {
+            "user": "Sigh. Can I open up to you?",
+            "bot": "Perhaps you don't want to open up to I."
+        },
+        {
+            "user": "bye",
+            "bot": "Very interesting. Can you tell me more?"
+        }
+    ],
+    "N_rounds": 2,
+    "reason": "Low sense and huge grammar error"
+}

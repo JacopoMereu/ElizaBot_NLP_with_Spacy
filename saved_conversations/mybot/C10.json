@@ -1,0 +1,22 @@
+{
+    "conversation": [
+        {
+            "user": "I had a terrible day.",
+            "bot": "Why did you have a terrible day?"
+        },
+        {
+            "user": "Today the school principal suspended me...",
+            "bot": "Before you described day as terrible. Can you go more deep about that?"
+        },
+        {
+            "user": "My parent grounded me for an entire month!",
+            "bot": "When your parent grounded you for an entire month, how do you feel?"
+        },
+        {
+            "user": "Well, what do you think about it?",
+            "bot": "Please consider whether you can answer your own question."
+        }
+    ],
+    "N_rounds": 4,
+    "reason": "Low sense"
+}

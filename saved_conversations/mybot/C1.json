@@ -1,0 +1,38 @@
+{
+    "conversation": [
+        {
+            "user": "I'm having a deja vu",
+            "bot": "Why are you having a deja vu?"
+        },
+        {
+            "user": "I think I've already spoken to you several times.",
+            "bot": "Why do you think you have already spoken to me?"
+        },
+        {
+            "user": "I don't know. It's just a feeling.",
+            "bot": "Why are you saying it's just a feeling?"
+        },
+        {
+            "user": "Because it is.",
+            "bot": "Does that reason apply to anything else?"
+        },
+        {
+            "user": "Like to what?",
+            "bot": "Why don't you tell me?"
+        },
+        {
+            "user": "Are you fooling me?",
+            "bot": "Calm down, please."
+        },
+        {
+            "user": "I AM CALM!",
+            "bot": "Why are you saying you are calm?"
+        },
+        {
+            "user": "Because...Nevermind.",
+            "bot": "You said several times. Why is that?"
+        }
+    ],
+    "N_rounds": 7,
+    "reason": "Asking information that is already known"
+}

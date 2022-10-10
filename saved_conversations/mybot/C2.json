@@ -1,0 +1,10 @@
+{
+    "conversation": [
+        {
+            "user": "Everything bothers me lately.",
+            "bot": "How do hers you lately make you feel?"
+        }
+    ],    
+    "N_rounds": 1,
+    "reason": "I forgot to put the word boundary to a pattern containing thw word 'bot'"
+}

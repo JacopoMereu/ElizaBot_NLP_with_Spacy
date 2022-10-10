@@ -1,0 +1,31 @@
+{
+    "generated_text": "I beat your bot in this one.",
+    "conversation": {
+      "generated_responses": [
+        "Hi! :D",
+        "Nice to meet you too!",
+        "Sure! :D",
+        "I'm not sure if I did, but I did.",
+        "It means you beat my bot in this one.",
+        "I beat your bot in this one.",
+        "I beat your bot in this one.",
+        "I beat your bot in this one."
+      ],
+      "past_user_inputs": [
+        "Hi",
+        "Hi, nice to meet you.",
+        "Sigh. Can I open up to you?",
+        "Ok, you beat my bot in this one.",
+        "What does that mean?",
+        "No... YOU beat my bot and not the opposite.",
+        "Exactly...Good job.",
+        "I got it."
+      ]
+    },
+    "warnings": [
+      "Setting `pad_token_id` to `eos_token_id`:50256 for open-end generation.",
+      "The attention mask and the pad token id were not set. As a consequence, you may observe unexpected behavior. Please pass your input's `attention_mask` to obtain reliable results."
+    ],
+    "N_rounds": 5,
+    "reason": "repetition"
+  }
