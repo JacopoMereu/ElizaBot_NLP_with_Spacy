@@ -1,5 +1,7 @@
 # ElizaBot_NLP_with_Spacy
  The project for the NLP course: an Eliza-like chatbot created combining classic generic regex matching and specific spacy matching.
+ 
+ Link to the short [slides](https://docs.google.com/presentation/d/1r0nTGwsfECmXABpUA1FCAqnfX9UcrebLfWB1aK9-Rk4/edit?usp=sharing).
 
 <br>
  <h2>Library dependencies</h2>
